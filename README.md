@@ -1,40 +1,37 @@
-# Univeris
-Univeris DevOps Coding
-#!/bin/bash
-set -x
-for filename in *.Z01; do
-yy=`echo $filename | awk -F '.' '{print $2}' | cut -c5-6`
-if [ -d "./$yy" ]
-then
-echo "Directory $yy exists."
-else
-mkdir $yy
-fi
-mm=`echo $filename | awk -F '.' '{print $2}' | cut -c3-4`
-if [ -d "./$yy/$mm" ]
-then
-echo "Directory ./$yy/$mm exists."
-else
-mkdir -p ./$yy/$mm
-fi
-dd=`echo $filename | awk -F '.' '{print $2}' | cut -c1-2`
-if [ -d "./$yy/$mm/$dd" ]
-then
-echo "Directory ./$yy/$mm/$dd exists."
-else
-mkdir -p ./$yy/$mm/$dd
-fi
-FTC=`echo $filename |  awk -F '.' '{print $1}' | cut -c1-2`
-if [ -d "./$yy/$mm/$dd/$FTC" ]
-then
-echo "Directory ./$yy/$mm/$dd/$FTC exists."
-else
-mkdir -p ./$yy/$mm/$dd/$FTC
-fi
-if [ -e "./$yy/$mm/$dd/$FTC/$filename" ]
-then
-echo "File ./$yy/$mm/$dd/$FTC/$filename exists."
-else
-cp $filename ./$yy/$mm/$dd/$FTC
-fi
-done
+# PART 1:  Create Network ( VPC ) , Private and public subnetwork ( subnet ) with nat gateway.
+
+# PART 2 : Deploying GCP VMs located in a private subnet, inside an unmanaged instance group, with a load balancer using Terraform
+
+The script will install two Ubuntu instances with Apache web server located in private subnet, without public ip, inside an unmanaged instance group, with a load balancer using Terraform. 
+
+lb.tf --> Create unmanaged instance group, backend services and all components required by the load balancer 
+
+network-firewall.tf --> Configure basic firewall for the network
+
+network-variables.tf --> Define network variables
+
+network.tf --> Define network, vpc, subnet, icmp firewall
+
+provider.tf --> Configure Google Cloud provider
+
+terraform.tfvars --> Defining variables 
+
+variables-auth.tf --> Application and authentication variables
+
+vm.tf --> Create two Ubuntu VMs with Apache web server
+
+# Notes
+
+Check list of Google Cloud OS images --> https://cloud.google.com/compute/docs/images
+
+Create the Json file for authentication --> https://cloud.google.com/iam/docs/creating-managing-service-account-keys
+
+# Steps to run: Run below command from the same directory where terraform files are present after authentiation to gcloud:
+
+	`terraform init`
+	`terraform plan`
+	`terraform apply`
+
+# If you want to destroy  run below command :
+
+	`terraform destroy`
